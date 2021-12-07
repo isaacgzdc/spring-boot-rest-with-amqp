@@ -8,8 +8,8 @@ spring:
   datasource:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/db01
-    username: igdc
-    password: 123.abc
+    username: ****
+    password: ****
   jpa:
     database: postgresql
     show-sql: true
