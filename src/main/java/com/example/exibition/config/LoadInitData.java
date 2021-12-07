@@ -17,6 +17,7 @@ import com.example.exibition.model.Fair;
 import com.example.exibition.repository.CityRepository;
 import com.example.exibition.repository.ExibitionRepository;
 import com.example.exibition.repository.FairRepository;
+import com.example.exibition.service.RabbitMQService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +31,9 @@ public class LoadInitData implements CommandLineRunner {
 	private FairRepository fairRepository;
 	@Autowired
 	private CityRepository cityRepository;
-
+	@Autowired
+	private RabbitMQService rabbitMQService;
+	
 	@Override
 	@Transactional
 	public void run(String... args) throws Exception {
@@ -89,6 +92,7 @@ public class LoadInitData implements CommandLineRunner {
 		exibition1.setFromDate(LocalDateTime.of(2021, 12, 25, 9, 30, 0));
 		exibition1.setToDate(LocalDateTime.of(2021, 12, 28, 18, 45, 0));
 		exibitionRepository.save(exibition1);
+		rabbitMQService.send(exibition1);
 		
 		Exibition exibition2 = new Exibition();
 		exibition2.setCity(city1);
@@ -98,6 +102,7 @@ public class LoadInitData implements CommandLineRunner {
 		exibition2.setFromDate(LocalDateTime.of(2022, 7, 14, 10, 0, 0));
 		exibition2.setToDate(LocalDateTime.of(2022, 7, 17, 16, 30, 0));
 		exibitionRepository.save(exibition2);
+		rabbitMQService.send(exibition2);
 		
 		Exibition exibition3 = new Exibition();
 		exibition3.setCity(city3);
@@ -107,8 +112,10 @@ public class LoadInitData implements CommandLineRunner {
 		exibition3.setFromDate(LocalDateTime.of(2022, 5, 4, 8, 15, 0));
 		exibition3.setToDate(LocalDateTime.of(2022, 5, 9, 19, 30, 0));
 		exibitionRepository.save(exibition3);
+		rabbitMQService.send(exibition3);
 
 		log.debug("Exibitions saved!");
+		
 
 	}
 
