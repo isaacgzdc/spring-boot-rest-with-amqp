@@ -1,4 +1,4 @@
-package com.example.exibition.config;
+package com.example.exibition.data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import com.example.exibition.aspect.Monitoring;
 import com.example.exibition.model.City;
 import com.example.exibition.model.Continent;
 import com.example.exibition.model.Exibition;
@@ -34,6 +35,7 @@ public class LoadInitData implements CommandLineRunner {
 	@Autowired
 	private RabbitMQService rabbitMQService;
 	
+	@Monitoring
 	@Override
 	@Transactional
 	public void run(String... args) throws Exception {
@@ -115,7 +117,6 @@ public class LoadInitData implements CommandLineRunner {
 		rabbitMQService.send(exibition3);
 
 		log.debug("Exibitions saved!");
-		
 
 	}
 

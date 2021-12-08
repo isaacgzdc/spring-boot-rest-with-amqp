@@ -14,16 +14,13 @@ public class RabbitMQConsumerServiceImpl implements RabbitMQConsumerService, Mes
 
 	@Override
 	public void onMessage(Message message) {
-		log.debug("==============================================================================");
-		log.debug("==============================================================================");
-		log.debug(message.toString());
-		log.debug("==============================================================================");
-		log.debug("==============================================================================");
+		log.debug("[+] CONSUMED MSG: {}",message.toString());
 	}
 
 	@Override
 	public void consume(Exibition exibition) {
-		log.debug("not working yet !!!");
+		log.warn("No yet implemented!!!");
+		throw new UnsupportedOperationException();
 	}
 
 

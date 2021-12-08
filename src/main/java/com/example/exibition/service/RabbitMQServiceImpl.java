@@ -30,11 +30,10 @@ public class RabbitMQServiceImpl implements RabbitMQService{
 	 
 	@Override
 	public void send(Exibition exibition) {
-		
-		log.debug("Data to be send to rabbitMQ: {}",exibition.toString());
 		rabbitTemplate.convertAndSend(exchange, routingKeyDev, exibition);
 		log.debug("Message was send to exchange: {} with routing key ({})",
 				exchange, routingKeyDev);
+		log.debug("[+] PRODUCED MSG: {}", exibition);
 	}
 	
 }
