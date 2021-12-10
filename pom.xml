@@ -19,6 +19,17 @@
 		<openapi.version>1.5.13</openapi.version>
 	</properties>
 	<dependencies>
+	
+		<!-- SECURITY with JWT -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
 
 		<!-- RabbitMQ -->
 		<dependency>

@@ -2,12 +2,14 @@ package com.example.exibition.data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.example.exibition.aspect.Monitoring;
@@ -15,9 +17,14 @@ import com.example.exibition.model.City;
 import com.example.exibition.model.Continent;
 import com.example.exibition.model.Exibition;
 import com.example.exibition.model.Fair;
+import com.example.exibition.model.Role;
+import com.example.exibition.model.RoleName;
+import com.example.exibition.model.LocalUser;
 import com.example.exibition.repository.CityRepository;
 import com.example.exibition.repository.ExibitionRepository;
 import com.example.exibition.repository.FairRepository;
+import com.example.exibition.repository.RoleRepository;
+import com.example.exibition.repository.UserRepository;
 import com.example.exibition.service.RabbitMQService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +41,13 @@ public class LoadInitData implements CommandLineRunner {
 	private CityRepository cityRepository;
 	@Autowired
 	private RabbitMQService rabbitMQService;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private RoleRepository roleRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Monitoring
 	@Override
@@ -42,6 +56,24 @@ public class LoadInitData implements CommandLineRunner {
 		for (String arg : args) {
 			log.debug("ARGUMENT => {}", arg);
 		}
+
+		Role role = Role.builder()
+				.name(RoleName.MANAGER)
+				.build();
+		roleRepository.save(role);
+		
+		LocalUser user = new LocalUser();
+		user.setUsername("spring");
+		user.setPassword(passwordEncoder.encode("springpass"));
+		user.setEnable(Boolean.TRUE);
+		user.setEmail("test@test.test");
+		user.setCreatedAt(LocalDateTime.now());
+		user.getRoles().add(role);
+		userRepository.save(user);
+		
+//		roleRepository.save(role);
+		
+		log.debug("[###] user() password() [###]", user.getUsername(), user.getPassword());
 
 		City city1 = new City();
 		city1.setName("Lisbon");
@@ -64,7 +96,7 @@ public class LoadInitData implements CommandLineRunner {
 		city4.setPopulation(new BigDecimal(400000));
 		city4.setCreatedAt(LocalDateTime.now().minusDays(1));
 
-		cityRepository.saveAll(Arrays.asList(city1, city2, city3, city4));
+		cityRepository.saveAll(Stream.of(city1, city2, city3, city4).collect(Collectors.toList()));
 
 		log.debug("Cities saved!");
 
@@ -82,7 +114,7 @@ public class LoadInitData implements CommandLineRunner {
 		fair4.setCreatedAt(now);
 		fair4.setName("Java clean code");
 
-		fairRepository.saveAll(Arrays.asList(fair1, fair3, fair2, fair4));
+		fairRepository.saveAll(Stream.of(fair1, fair2, fair3, fair4).collect(Collectors.toList()));
 
 		log.debug("Fairs saved!");
 
@@ -95,7 +127,7 @@ public class LoadInitData implements CommandLineRunner {
 		exibition1.setToDate(LocalDateTime.of(2021, 12, 28, 18, 45, 0));
 		exibitionRepository.save(exibition1);
 		rabbitMQService.send(exibition1);
-		
+
 		Exibition exibition2 = new Exibition();
 		exibition2.setCity(city1);
 		exibition2.setFair(fair4);
@@ -105,7 +137,7 @@ public class LoadInitData implements CommandLineRunner {
 		exibition2.setToDate(LocalDateTime.of(2022, 7, 17, 16, 30, 0));
 		exibitionRepository.save(exibition2);
 		rabbitMQService.send(exibition2);
-		
+
 		Exibition exibition3 = new Exibition();
 		exibition3.setCity(city3);
 		exibition3.setFair(fair3);

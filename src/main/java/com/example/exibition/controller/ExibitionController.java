@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.exibition.dao.ExibitionDao;
 import com.example.exibition.dto.ExibitionDTO;
 import com.example.exibition.exception.ExibitionException;
 import com.example.exibition.model.Exibition;
@@ -30,9 +31,18 @@ public class ExibitionController {
 
 	private final ExibitionService exibitionService;
 
+	private final ExibitionDao dao;
+	
 	@GetMapping
 	public ResponseEntity<List<Exibition>> getAll() {
 		List<Exibition> body = exibitionService.findAll();
+		HttpStatus status = HttpStatus.OK;
+		return new ResponseEntity<List<Exibition>>(body, status);
+	}
+	
+	@GetMapping("/filter")
+	public ResponseEntity<List<Exibition>> filter(@RequestBody ExibitionDTO dto) {
+		List<Exibition> body = dao.findAll(dto);
 		HttpStatus status = HttpStatus.OK;
 		return new ResponseEntity<List<Exibition>>(body, status);
 	}

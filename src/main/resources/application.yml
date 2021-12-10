@@ -35,4 +35,6 @@ springdoc:
     path: /api-ui-html
     operations-sorter: method
     
-  
+jwt:
+  secret: password
+   

@@ -46,4 +46,5 @@ public class ExibitionServiceImpl implements ExibitionService {
 				.build();
 		return exibitionRespository.save(exibition);
 	}
+
 }
