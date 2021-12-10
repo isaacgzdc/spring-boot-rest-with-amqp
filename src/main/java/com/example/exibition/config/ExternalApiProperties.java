@@ -18,6 +18,7 @@ public class ExternalApiProperties {
 	@Value( "${host}" )
 	private String host;
 	@Value( "${port}" )
+	private String port;
 	
 	@PostConstruct
 	public void log() {
