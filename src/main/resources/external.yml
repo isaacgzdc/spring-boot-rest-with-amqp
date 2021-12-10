@@ -1,5 +1,3 @@
-external.host=http://localhost
-external.port=8282
-external.user=guest
-external.password=guest
-external.path=index
+external:
+  host=server
+  port=8282

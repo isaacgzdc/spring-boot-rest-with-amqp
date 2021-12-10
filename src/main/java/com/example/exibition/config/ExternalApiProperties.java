@@ -2,23 +2,23 @@ package com.example.exibition.config;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Getter
-@Setter
-@NoArgsConstructor
+@Configuration
 @ConfigurationProperties(prefix = "external")
-@PropertySource(value = {"classpath:"})
+@PropertySource(value = {"classpath:external.yml"})
 public class ExternalApiProperties {
+	
+	@Value( "${host}" )
 	private String host;
-	private String port;
+	@Value( "${port}" )
+	
 	@PostConstruct
 	public void log() {
 		log.debug("============================================================");
